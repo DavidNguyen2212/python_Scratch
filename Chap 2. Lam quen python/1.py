@@ -14,9 +14,9 @@
 này là khác nhau.
 8. Từ khóa trong python: chú ý kí tự _ là biến nhớ đặc biệt, luôn chứa giá trị của biểu thức gần đây nhất
 9. Viết lệnh trên nhiều dòng:
-- Dùng dấu sau đó xuống dòng
+- Dùng dấu \ sau đó xuống dòng
 - Nếu đã mở ngoặc (, thì ta xuống dòng viết bình thường.
-- Khi nhập một xâu kí tự, nếu xâu đó qua dài dùng 3 dấu quotes.
+- Khi nhập một xâu kí tự, nếu xâu đó qua dài dùng 3 dấu quotes """.
 10. Hàm divmod
 divmod(x,y) = x // y, x % y
 
@@ -24,3 +24,6 @@ Bài 1: Vì tên biến tách rời kiểu dữ liệu (cơ chế namespace), t�
 tượng trong Object thay đổi. Biến nhớ nhận được nhiều giá trị khác nhau
 Bài 2: hàm trong python 
 '''
+x,y,z = 1,2,3
+x,y = y,x
+print(x,y)
