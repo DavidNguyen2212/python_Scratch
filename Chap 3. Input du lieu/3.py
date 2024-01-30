@@ -16,7 +16,7 @@ parse_Str = str(divmod(19,5))
 
 # 3. Hàm eval chuyển đổi xâu biểu thức về dạng số thực (là nguyên nếu kết quả thực sự là nguyên và toán tử đều nguyên)
 parse_Expr = eval("24 ** 2 - 15")
-    # eval nhận nhiều biểu thức cùng lúc, chách nhawu bởi dấu phẩy
+    # eval nhận nhiều biểu thức cùng lúc, cách nhau bởi dấu phẩy
 m, n = eval("3, 4**2")
 
 # 4. Kiểu bool và lệnh if
