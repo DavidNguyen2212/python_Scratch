@@ -1,0 +1,6 @@
+This is plain text data file
+1 8 10 15 12
+12.4 17.99 3.27 -14.66 1.2
+
+A B C a b c
+This is the last line
