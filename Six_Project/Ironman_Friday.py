@@ -1,7 +1,7 @@
 # Cài đặt thư viện text to speech: pip3 install pyttsx3, pip3 install pywin32
-import pyttsx3
+import pyttsx4
 
-friday = pyttsx3.init()
+friday = pyttsx4.init()
 voice = friday.getProperty('voices')    # getProperty: lấy giọng
 friday.setProperty('voice', voice[1].id)  # set để cài đặt. voice[1] là giọng nam, voice[0] là nữ
 
@@ -30,7 +30,7 @@ import speech_recognition as sr
 def command():
     c=sr.Recognizer()
     with sr.Microphone() as source:
-        c.pause_threshold=2
+        c.pause_threshold = 1
         audio=c.listen(source)
     try:
         query = c.recognize_google(audio,language='en-US')
