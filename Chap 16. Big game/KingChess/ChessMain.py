@@ -27,10 +27,31 @@ def main():
     gs = ChessEngine.GameState()
     loadImages()    # Chỉ thực hiện 1 lần trước while loop
     running = True
+    # Theo dõi lần click cuối cùng
+    sqSelected = ()
+    # Theo dõi 2 lần click
+    playerClicks = []
     while running:
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 running = False
+            elif e.type == pg.MOUSEBUTTONDOWN:
+                location = pg.mouse.get_pos()
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
+                if sqSelected == (row, col):    # Người dùng nhấn trùng ô
+                    sqSelected = () # Khử chọn
+                    playerClicks = []   # Xóa các lần kích chuột
+                else:
+                    sqSelected = (row, col)
+                    playerClicks.append(sqSelected)
+                if len(playerClicks) == 2:
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(move.getChessNotation())
+                    gs.makeMove(move)
+                    sqSelected = () # Reset lượt click
+                    playerClicks = []
+
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         pg.display.flip()
