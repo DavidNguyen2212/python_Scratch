@@ -21,11 +21,46 @@ class GameState():
         # Thuộc tính phụ trách Undo
         self.moveLog = []   
 
+    # Lấy một bước đi làm tham số, thực thi nó (chưa tính đến Nhập thành-castling và bắt tốt qua đường - enpassant)
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move)
         self.whiteToMove = not self.whiteToMove # Đổi lượt đi
+
+    """
+    Undo bước đi vừa thực hiện
+    """
+    def undoMove(self):
+        if len(self.moveLog) != 0:
+            move = self.moveLog.pop()
+            self.board[move.startRow][move.startCol] = move.pieceMoved
+            self.board[move.endRow][move.endCol] = move.pieceCaptured
+            self.whiteToMove = not self.whiteToMove    
+
+    """
+    Kiểm tra nước đi có hợp lệ không
+    """
+    def getValidMoves(self):
+        return self.getAllPossibleMoves()   # chưa quan tâm đến nước Chiếu (check)
+    def getAllPossibleMoves(self):
+        moves = [Move((6,4), (4,4), self.board)]
+        for r in range(len(self.board)):    # đi qua từng dòng
+            for c in range(len(self.board[r])): # duyệt dòng đó
+                turn = self.board[r][c][0]
+                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                    piece = self.board[r][c][1]
+                    if piece == 'p':
+                        self.getPawnMoves(r, c, moves)
+                    elif piece == 'R':
+                        self.getRookMoves(r, c, moves)
+        return moves
+                    
+
+    def getPawnMoves(self, r, c, moves):
+        pass
+    def getRookMoves(self, r, c, moves):
+        pass
 
 class Move:
     # Ánh xạ key:value
@@ -41,6 +76,15 @@ class Move:
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        # Như một hash function
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol   
+        print(self.moveID)
+
+    """Override toán tử ="""
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
+        return False
 
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + " --> " + self.getRankFile(self.endRow, self.endCol)

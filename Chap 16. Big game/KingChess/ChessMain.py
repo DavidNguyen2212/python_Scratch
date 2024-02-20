@@ -25,6 +25,8 @@ def main():
     clock = pg.time.Clock()
     screen.fill(pg.Color("white"))
     gs = ChessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False
     loadImages()    # Chỉ thực hiện 1 lần trước while loop
     running = True
     # Theo dõi lần click cuối cùng
@@ -48,10 +50,20 @@ def main():
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                     print(move.getChessNotation())
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = () # Reset lượt click
                     playerClicks = []
-
+            elif e.type == pg.KEYDOWN:
+                if e.key == pg.K_z:     # phím z trong pygame
+                    gs.undoMove()
+                    moveMade = True
+        
+        if moveMade:
+            # Chỉ sinh các nước đi hợp lệ lần nữa khi nước đi hợp lệ đã được đưa ra
+            validMoves = gs.getValidMoves()
+            moveMade = False    
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         pg.display.flip()
