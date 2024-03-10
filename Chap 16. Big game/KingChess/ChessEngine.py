@@ -13,7 +13,7 @@ class GameState():
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "bp", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
         ]
@@ -44,11 +44,11 @@ class GameState():
     def getValidMoves(self):
         return self.getAllPossibleMoves()   # chưa quan tâm đến nước Chiếu (check)
     def getAllPossibleMoves(self):
-        moves = [Move((6,4), (4,4), self.board)]
+        moves = []
         for r in range(len(self.board)):    # đi qua từng dòng
             for c in range(len(self.board[r])): # duyệt dòng đó
                 turn = self.board[r][c][0]
-                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
                     if piece == 'p':
                         self.getPawnMoves(r, c, moves)
@@ -58,7 +58,30 @@ class GameState():
                     
 
     def getPawnMoves(self, r, c, moves):
-        pass
+        if self.whiteToMove:
+            if self.board[r-1][c] == "--":
+                moves.append(Move((r,c), (r-1,c), self.board))
+                if r == 6 and self.board[r-2][c] == "--":   # Tốt xuất phát & 2 ô
+                    moves.append(Move((r,c), (r-2,c), self.board))
+            if c - 1 >= 0:  # test để bắt bên trái
+                if self.board[r-1][c-1][0] == 'b': 
+                    moves.append(Move((r,c), (r-1,c-1), self.board))
+            if c + 1 <= 7:   # test để bắt bên phải
+                if self.board[r-1][c+1][0] == 'b':
+                    moves.append(Move((r,c), (r-1, c+1), self.board))
+        
+        else:   # tương tự với tốt đen
+            if self.board[r+1][c] == "--":
+                moves.append(Move((r,c), (r+1, c), self.board))
+                if r == 2 and self.board[r+2][c] == "--":
+                    moves.append(Move((r,c), (r+2,c), self.board))
+            if c - 1 >= 0:
+                if self.board[r+1][c-1][0] == "w":
+                    moves.append(Move((r,c), (r+1, c-1), self.board))
+            if c + 1 <= 7:
+                if self.board[r+1][c+1][0] == "w":
+                    moves.append(Move((r,c), (r+1, c+1), self.board))  
+
     def getRookMoves(self, r, c, moves):
         pass
 
